@@ -19,3 +19,7 @@ tonic-error-impl = {version = "0.1.1", path = "tonic-error-impl" }
 
 [workspace]
 members = ["tonic-error-example", "tonic-error-impl"]
+
+[workspace.metadata.release]
+sign-commit = true
+sign-tag = true
