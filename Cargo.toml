@@ -15,7 +15,7 @@ serde = {version = "1.0", features = ["derive"]}
 serde_json = "1.0"
 thiserror = "1.0"
 tonic = "0.7"
-tonic-error-impl = {version = "0.1.0", path = "tonic-error-impl" }
+tonic-error-impl = {version = "0.1.1", path = "tonic-error-impl" }
 
 [workspace]
 members = ["tonic-error-example", "tonic-error-impl"]
