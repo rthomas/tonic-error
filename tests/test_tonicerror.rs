@@ -11,7 +11,7 @@ pub enum TestError {
 #[test]
 fn test_convert() {
     let err = TestError::AnError("something".to_string());
-    let s = err.to_status().unwrap();
+    let s = err.to_status();
     let err2 = TonicError::from_status(&s).unwrap();
     assert_eq!(err, err2);
 }
@@ -19,7 +19,7 @@ fn test_convert() {
 #[test]
 fn test_no_metadata() {
     let err = TestError::AnError("something".to_string());
-    let mut s = err.to_status().unwrap();
+    let mut s = err.to_status();
     s.metadata_mut().clear();
     let res: Result<TestError, TonicErrorError> = TonicError::from_status(&s);
     match res {

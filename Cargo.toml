@@ -2,16 +2,20 @@
 name = "tonic-error"
 version = "0.1.0"
 edition = "2021"
+authors = ["Ryan Thomas <ryan@ryant.org>"]
 license = "Apache-2.0"
 description = "Derive trait to allow passing of custom errors through tonic Status responses."
+readme = "README.md"
+homepage = "https://github.com/rthomas/tonic-error"
+repository = "https://github.com/rthomas/tonic-error"
+keywords = ["gRPC", "tonic", "error"]
 
 [dependencies]
-prost = "0.10"
-serde = {version = "1.0.137", features = ["derive"]}
-serde_json = "1.0.82"
-thiserror = "1.0.31"
+serde = {version = "1.0", features = ["derive"]}
+serde_json = "1.0"
+thiserror = "1.0"
 tonic = "0.7"
 tonic-error-impl = {version = "0.1.0", path = "tonic-error-impl" }
 
 [workspace]
-members = ["tonic-error-impl"]
+members = ["tonic-error-example", "tonic-error-impl"]

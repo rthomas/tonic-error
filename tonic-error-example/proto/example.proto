@@ -1,0 +1,11 @@
+syntax = "proto3";
+package example;
+
+service Maths { rpc Div(DivRequest) returns (DivResponse); }
+
+message DivRequest {
+  int32 a = 1;
+  int32 b = 2;
+}
+
+message DivResponse { double result = 1; }

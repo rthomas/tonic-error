@@ -26,13 +26,26 @@ pub enum TonicErrorError {
     InvalidStatusCode(tonic::Code),
 }
 
-pub trait TonicError<'de>: Serialize + Deserialize<'de> + Display + Sized {
-    fn to_status(&self) -> Result<Status, TonicErrorError> {
+pub trait TonicError<'de>: Serialize + Deserialize<'de> + Display {
+    fn to_status(&self) -> Status {
+        let metadata_val = match serde_json::to_string(&self) {
+            Ok(s) => match s.parse() {
+                Ok(m) => m,
+                Err(e) => {
+                    return Status::internal(format!(
+                        "error creating metadata value from previous error: {e}"
+                    ))
+                }
+            },
+            Err(e) => {
+                return Status::internal(format!("error converting previous error to json: {e}"))
+            }
+        };
+
         let mut status = Status::internal(format!("internal error: {self}"));
+
+        status.metadata_mut().insert(CUSTOM_ERROR, metadata_val);
         status
-            .metadata_mut()
-            .insert(CUSTOM_ERROR, serde_json::to_string(&self)?.parse()?);
-        Ok(status)
     }
 
     fn from_status(s: &'de Status) -> Result<Self, TonicErrorError> {
