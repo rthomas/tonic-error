@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
 use thiserror::Error;
-use tonic::metadata::errors::{InvalidMetadataValue, ToStrError};
+use tonic::metadata::errors::ToStrError;
 use tonic::Status;
 
 pub use tonic_error_impl::*;
