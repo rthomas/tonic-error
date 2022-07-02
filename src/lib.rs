@@ -10,9 +10,6 @@ static CUSTOM_ERROR: &str = "x-custom-tonic-error";
 
 #[derive(Debug, Error)]
 pub enum TonicErrorError {
-    #[error("could not set metadata value: {0}")]
-    MetadataError(#[from] InvalidMetadataValue),
-
     #[error("serde_json error: {0}")]
     SerdeError(#[from] serde_json::Error),
 
