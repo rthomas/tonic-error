@@ -1,6 +1,6 @@
 tonic::include_proto!("example");
 
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use thiserror::Error;
 use tonic_error::TonicError;
 
