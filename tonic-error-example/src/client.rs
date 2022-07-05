@@ -5,7 +5,6 @@ use common::{DivRequest, MathsError};
 use std::error::Error;
 use tonic::transport::Channel;
 use tonic::Request;
-use tonic_error::TonicError;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -33,11 +32,10 @@ impl Client {
 
     pub async fn div(&mut self, a: i32, b: i32) -> Result<f64, MathsError> {
         let req = Request::new(DivRequest { a, b });
-        let resp = self
-            .client
-            .div(req)
-            .await
-            .map_err(|s| TonicError::from_status(&s).unwrap())?;
+        let resp = match self.client.div(req).await {
+            Ok(r) => r,
+            Err(e) => return Err(e.try_into().expect("could not convert status to error")),
+        };
 
         Ok(resp.into_inner().result)
     }

@@ -4,7 +4,6 @@ use common::maths_server::{Maths, MathsServer};
 use common::MathsError;
 use common::{DivRequest, DivResponse};
 use tonic::{transport::Server, Request, Response, Status};
-use tonic_error::TonicError;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -27,7 +26,7 @@ impl Maths for MathsService {
     async fn div(&self, req: Request<DivRequest>) -> Result<Response<DivResponse>, Status> {
         let req = req.into_inner();
         if req.b == 0 {
-            return Err(MathsError::DivByZero(req.a, req.b).to_status());
+            return Err(MathsError::DivByZero(req.a, req.b).into());
         }
         let result = req.a as f64 / req.b as f64;
         Ok(Response::new(DivResponse { result }))
