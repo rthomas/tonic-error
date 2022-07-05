@@ -4,6 +4,7 @@ use common::maths_client::MathsClient;
 use common::{DivRequest, MathsError};
 use std::error::Error;
 use tonic::transport::Channel;
+use tonic::Code;
 use tonic::Request;
 
 #[tokio::main]
@@ -32,9 +33,15 @@ impl Client {
 
     pub async fn div(&mut self, a: i32, b: i32) -> Result<f64, MathsError> {
         let req = Request::new(DivRequest { a, b });
+
         let resp = match self.client.div(req).await {
             Ok(r) => r,
-            Err(e) => return Err(e.try_into().expect("could not convert status to error")),
+            Err(e) => match e.code() {
+                Code::Internal => {
+                    return Err(e.try_into().expect("could not convert status to error"))
+                }
+                _ => panic!("error making rpc call: {e}"),
+            },
         };
 
         Ok(resp.into_inner().result)
