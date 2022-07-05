@@ -16,7 +16,7 @@ fn impl_tonic_error(ast: &syn::DeriveInput) -> TokenStream {
         static CUSTOM_ERROR: &str = "x-custom-tonic-error";
 
         impl TryFrom<tonic::Status> for #name {
-            type Error = anyhow::Error;
+            type Error = tonic_error::ParseError;
 
             fn try_from(s: tonic::Status) -> Result<#name, Self::Error> {
                 match s.code() {
@@ -24,10 +24,10 @@ fn impl_tonic_error(ast: &syn::DeriveInput) -> TokenStream {
                         if let Some(err) = s.metadata().get(CUSTOM_ERROR) {
                             Ok(serde_json::from_str(err.to_str()?)?)
                         } else {
-                            Err(anyhow::anyhow!("missing metadata entry for key: {}", CUSTOM_ERROR))
+                            Err(tonic_error::ParseError::MissingMetadata)
                         }
                     }
-                    c => Err(anyhow::anyhow!("not an internal error: {}", c)),
+                    c => Err(tonic_error::ParseError::InvalidStatusCode(s)),
                 }
             }
         }
