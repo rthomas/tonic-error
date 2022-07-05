@@ -29,28 +29,27 @@ These examples are taken from the included examples.
 ### Server Side
 
 ```rust
-    async fn div(&self, req: Request<DivRequest>) -> Result<Response<DivResponse>, Status> {
-        let req = req.into_inner();
-        if req.b == 0 {
-            return Err(MathsError::DivByZero(req.a, req.b).into());
-        }
-        let result = req.a as f64 / req.b as f64;
-        Ok(Response::new(DivResponse { result }))
+async fn div(&self, req: Request<DivRequest>) -> Result<Response<DivResponse>, Status> {
+    let req = req.into_inner();
+    if req.b == 0 {
+        return Err(MathsError::DivByZero(req.a, req.b).into());
     }
+    let result = req.a as f64 / req.b as f64;
+    Ok(Response::new(DivResponse { result }))
+}
 ```
 
 ### Client Side
 
 ```rust
-    pub async fn div(&mut self, a: i32, b: i32) -> Result<f64, MathsError> {
-        let req = Request::new(DivRequest { a, b });
-        let resp = match self.client.div(req).await {
-            Ok(r) => r,
-            Err(e) => return Err(e.try_into().expect("could not convert status to error")),
-        };
+pub async fn div(&mut self, a: i32, b: i32) -> Result<f64, MathsError> {
+    let req = Request::new(DivRequest { a, b });
+    let resp = match self.client.div(req).await {
+        Ok(r) => r,
+        Err(e) => return Err(e.try_into().expect("could not convert status to error")),
+    };
 
-        Ok(resp.into_inner().result)
-    }
+    Ok(resp.into_inner().result)
 }
 ```
 
