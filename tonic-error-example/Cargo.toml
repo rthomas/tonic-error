@@ -13,7 +13,7 @@ serde = {version = "1.0", features = ["derive"]}
 serde_json = "1.0"
 thiserror = "1.0"
 tonic = "0.7"
-tonic-error = {version = "0.2.0", path = ".." }
+tonic-error = {version = "0.3.0", path = ".." }
 tokio = { version = "1.0", features = ["macros", "rt-multi-thread"] }
 
 [build-dependencies]
